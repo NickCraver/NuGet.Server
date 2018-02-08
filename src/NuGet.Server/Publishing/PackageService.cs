@@ -106,7 +106,7 @@ namespace NuGet.Server.Publishing
             var packageId = routeData.GetRequiredString("packageId");
             var version = new SemanticVersion(routeData.GetRequiredString("version"));
 
-            var requestedPackage = _serverRepository.FindPackage(packageId, version);
+            var requestedPackage = _serverRepository.FindPackage(packageId, version) ?? GetFromFeedsAndCache(packageId, version);
             if (requestedPackage != null)
             {
                 context.Response.AddHeader("content-disposition", 
@@ -133,6 +133,17 @@ namespace NuGet.Server.Publishing
                 // Package not found
                 WritePackageNotFound(context, packageId, version);
             }
+        }
+
+        public IPackage GetFromFeedsAndCache(string packageId, SemanticVersion version)
+        {
+            var repo = PackageRepositoryFactory.Default.CreateRepository("https://packages.nuget.org/api/v2");
+            var package = repo.FindPackage(packageId, version);
+            if (package != null)
+            {
+                _serverRepository.AddPackage(package);
+            }
+            return package;
         }
 
         public void ClearCache(HttpContextBase context)
