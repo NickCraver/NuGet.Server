@@ -305,7 +305,7 @@ namespace NuGet.Server.Infrastructure
             throw new NotImplementedException("The NuGet.Server.ServerPackage type does not support getting files.");
         }
 
-        public Stream GetStream()
+        public virtual Stream GetStream()
         {
             throw new NotImplementedException("The NuGet.Server.ServerPackage type does not support getting a stream.");
         }

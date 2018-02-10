@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information. 
 
 using System;
+using System.Web.Configuration;
 using NuGet.Server.Infrastructure;
 using NuGet.Server.Logging;
 using NuGet.Server.Publishing;
@@ -20,7 +21,14 @@ namespace NuGet.Server
         {
             _hashProvider = new CryptoHashProvider(Constants.HashAlgorithm);
 
-            _packageRepository = new ServerPackageRepository(PackageUtility.PackagePhysicalPath, _hashProvider, new TraceLogger());
+            if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["dbType"]))
+            {
+                _packageRepository = new DatabasePackageRepository(_hashProvider, new TraceLogger());
+            }
+            else
+            {
+                _packageRepository = new ServerPackageRepository(PackageUtility.PackagePhysicalPath, _hashProvider, new TraceLogger());
+            }
 
             _packageAuthenticationService = new PackageAuthenticationService();
 

@@ -168,7 +168,7 @@ namespace NuGet.Server.Infrastructure
             }
         }
 
-        private static void UpdateLatestVersions(IEnumerable<ServerPackage> packages)
+        public static void UpdateLatestVersions(IEnumerable<ServerPackage> packages)
         {
             var semVer1AbsoluteLatest = InitializePackageDictionary();
             var semVer1Latest = InitializePackageDictionary();
