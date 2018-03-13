@@ -40,7 +40,7 @@ namespace NuGet.Server.Infrastructure
         {
             return compatibility.AllowSemVer2
                  ? DB.Packages
-                 : DB.Packages.Where(p => !p.IsSemVer2);
+				 : DB.Packages.Where(p => !p.IsSemVer2);
         }
 
         public bool Exists(string packageId, SemanticVersion version)
@@ -81,7 +81,7 @@ namespace NuGet.Server.Infrastructure
         {
             //terribad search ENGAGE
             var packages = DB.Packages
-                .Where(p => p.Id.Contains(searchTerm)
+				.Where(p => p.Id.Contains(searchTerm)
                          || p.Description.Contains(searchTerm)
                          || p.Summary.Contains(searchTerm)
                          || p.Tags.Contains(searchTerm));
@@ -154,6 +154,7 @@ namespace NuGet.Server.Infrastructure
             }
 
             DB.Packages.Add(new DatabasePackage(package));
+			DB.PackagesData.Add(new DatabasePackageData(package));
             DB.SaveChanges();
             UpdateLatestVersions(package.Id);
             _logger.Log(LogLevel.Info, "Finished adding package {0} {1}.", package.Id, package.Version);

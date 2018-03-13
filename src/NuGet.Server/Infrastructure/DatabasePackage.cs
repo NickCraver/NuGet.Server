@@ -21,18 +21,13 @@ namespace NuGet.Server.Infrastructure
             using (var ms = new MemoryStream())
             {
                 ps.CopyTo(ms);
-                PackageData = ms.ToArray();
-                PackageSize = PackageData.Length;
+                PackageSize = ms.Length;
             }
         }
 
         public static string GetVersionString(SemanticVersion version) => version.ToFullString();
         public static SemanticVersion GetSemanticVersion(string version) => SemanticVersion.TryParse(version, out var val) ? val : null;
-
-        [JsonIgnore]
-        public byte[] PackageData { get; set; }
-        public override Stream GetStream() => new MemoryStream(PackageData);
-
+		
         private bool? _isPrerelease;
         [JsonIgnore]
         public bool IsPrerelase

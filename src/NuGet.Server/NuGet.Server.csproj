@@ -17,6 +17,7 @@
     </NuGetPackageImportStamp>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup>
     <ProjectGuid>{793B20A9-E263-4B54-BB31-305B602087CE}</ProjectGuid>
@@ -72,6 +73,7 @@
     <Compile Include="DataServices\ClientCompatibilityFactory.cs" />
     <Compile Include="Infrastructure\ClientCompatibility.cs" />
     <Compile Include="Infrastructure\DatabaseContext.cs" />
+    <Compile Include="Infrastructure\DatabasePackageData.cs" />
     <Compile Include="Infrastructure\JsonNetPackagesSerializer.cs" />
     <Compile Include="Infrastructure\IPackagesSerializer.cs" />
     <Compile Include="Infrastructure\IServerPackageStore.cs" />
