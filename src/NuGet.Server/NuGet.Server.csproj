@@ -31,6 +31,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Services" Version="5.7.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational">
+      <Version>2.0.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0" />

@@ -153,8 +153,15 @@ namespace NuGet.Server.Infrastructure
                 throw new InvalidOperationException(message);
             }
 
-            DB.Packages.Add(new DatabasePackage(package));
-			DB.PackagesData.Add(new DatabasePackageData(package));
+			var dbPackageData = new DatabasePackageData(package);
+			var dbPackage = new DatabasePackage(package)
+			{
+				PackageData = dbPackageData
+			};
+
+			DB.PackagesData.Add(dbPackageData);
+			DB.Packages.Add(dbPackage);
+			
             DB.SaveChanges();
             UpdateLatestVersions(package.Id);
             _logger.Log(LogLevel.Info, "Finished adding package {0} {1}.", package.Id, package.Version);

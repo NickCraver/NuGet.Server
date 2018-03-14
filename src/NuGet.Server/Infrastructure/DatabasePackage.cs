@@ -25,7 +25,12 @@ namespace NuGet.Server.Infrastructure
             }
         }
 
-        public static string GetVersionString(SemanticVersion version) => version.ToFullString();
+		[JsonIgnore]
+		
+		public virtual DatabasePackageData PackageData { get; set; }
+		public override Stream GetStream() => new MemoryStream(PackageData.PackageData);
+
+		public static string GetVersionString(SemanticVersion version) => version.ToFullString();
         public static SemanticVersion GetSemanticVersion(string version) => SemanticVersion.TryParse(version, out var val) ? val : null;
 		
         private bool? _isPrerelease;

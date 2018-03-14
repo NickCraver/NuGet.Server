@@ -1,22 +1,21 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 
 namespace NuGet.Server.Infrastructure
 {
 	public class DatabasePackageData
 	{
-		[Column("PackageId")]
 		[JsonRequired]
 		public string PackageId { get; set; }
-		[Column("Version")]
-		public string Version { get; set; }
+		public virtual string Version { get; set; }
 		[JsonIgnore]
 		public byte[] PackageData { get; set; }
 		public DateTimeOffset LastUpdated { get; set; }
 		public DateTimeOffset Created { get; set; }
+
+		[JsonIgnore]
+		public virtual DatabasePackage Package { get; set; }
 
 		public DatabasePackageData() { }
 
