@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -102,6 +103,7 @@ namespace NuGet.Server.Infrastructure
         private List<PackageDependencySet> _dependencySets;
 
         [JsonIgnore]
+		[NotMapped]
         public IEnumerable<PackageDependencySet> DependencySets
         {
             get

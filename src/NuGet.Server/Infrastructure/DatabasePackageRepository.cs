@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Versioning;
+using Microsoft.EntityFrameworkCore;
 using System.Web.Configuration;
 using NuGet.Server.Logging;
 
@@ -40,7 +41,7 @@ namespace NuGet.Server.Infrastructure
         {
             return compatibility.AllowSemVer2
                  ? DB.Packages
-                 : DB.Packages.Where(p => !p.IsSemVer2);
+				 : DB.Packages.Where(p => !p.IsSemVer2);
         }
 
         public bool Exists(string packageId, SemanticVersion version)
@@ -52,7 +53,7 @@ namespace NuGet.Server.Infrastructure
         public IPackage FindPackage(string packageId, SemanticVersion version)
         {
             // TODO: Account for SemVer1 vs 2 here
-            return DB.Packages.FirstOrDefault(p => p.Id == packageId
+            return DB.Packages.Include(p => p.PackageData).FirstOrDefault(p => p.Id == packageId
                                                 && p.VersionBacking == DatabasePackage.GetVersionString(version));
         }
 
@@ -81,7 +82,7 @@ namespace NuGet.Server.Infrastructure
         {
             //terribad search ENGAGE
             var packages = DB.Packages
-                .Where(p => p.Id.Contains(searchTerm)
+				.Where(p => p.Id.Contains(searchTerm)
                          || p.Description.Contains(searchTerm)
                          || p.Summary.Contains(searchTerm)
                          || p.Tags.Contains(searchTerm));
@@ -153,7 +154,15 @@ namespace NuGet.Server.Infrastructure
                 throw new InvalidOperationException(message);
             }
 
-            DB.Packages.Add(new DatabasePackage(package));
+			var dbPackageData = new DatabasePackageData(package);
+			var dbPackage = new DatabasePackage(package)
+			{
+				PackageData = dbPackageData
+			};
+
+			DB.PackagesData.Add(dbPackageData);
+			DB.Packages.Add(dbPackage);
+			
             DB.SaveChanges();
             UpdateLatestVersions(package.Id);
             _logger.Log(LogLevel.Info, "Finished adding package {0} {1}.", package.Id, package.Version);
