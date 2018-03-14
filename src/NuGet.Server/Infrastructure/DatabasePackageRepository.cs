@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Versioning;
+using Microsoft.EntityFrameworkCore;
 using System.Web.Configuration;
 using NuGet.Server.Logging;
 
@@ -52,7 +53,7 @@ namespace NuGet.Server.Infrastructure
         public IPackage FindPackage(string packageId, SemanticVersion version)
         {
             // TODO: Account for SemVer1 vs 2 here
-            return DB.Packages.FirstOrDefault(p => p.Id == packageId
+            return DB.Packages.Include(p => p.PackageData).FirstOrDefault(p => p.Id == packageId
                                                 && p.VersionBacking == DatabasePackage.GetVersionString(version));
         }
 
